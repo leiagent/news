@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleList from '../components/ArticleList.astro';
+
+// This would typically come from a data source or API
+const newsData = Astro.props.newsData || [];
+
+const pageTitle = '首页';
+const pageDescription = '每日更新全球科技、AI、软件开发等领域最新资讯';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="container">
+    <section class="hero">
+      <h2>欢迎来到科技新闻聚合</h2>
+      <p>为您精选全球科技、AI、软件开发等领域最新资讯</p>
+    </section>
+    
+    <section class="news-section">
+      <ArticleList articles={newsData} />
+    </section>
+  </div>
+</Layout>
+
+<style>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.news-section {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}
+</style>

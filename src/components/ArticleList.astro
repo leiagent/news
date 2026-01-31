@@ -1,0 +1,150 @@
+---
+export interface Props {
+  articles: Array<{
+    id?: string;
+    title: string;
+    summary: string;
+    url: string;
+    category: string;
+    timestamp: string;
+    language?: string;
+    translated_content?: string;
+  }>;
+}
+
+const { articles = [] } = Astro.props;
+---
+
+<div class="articles-container">
+  {articles.map((article) => (
+    <article class="article-card" data-category={article.category}>
+      <h3 class="article-title">
+        <a href={article.url} target="_blank" rel="noopener noreferrer">
+          {article.title}
+        </a>
+      </h3>
+      
+      <div class="article-summary">
+        {article.language === 'english' && article.translated_content 
+          ? article.translated_content 
+          : article.summary}
+      </div>
+      
+      <div class="article-meta">
+        <span class="article-category">{article.category.replace(/_/g, ' ')}</span>
+        <span class="article-date">{new Date(article.timestamp).toLocaleString('zh-CN')}</span>
+      </div>
+      
+      {article.language === 'english' && article.translated_content && (
+        <div class="language-controls">
+          <button class="toggle-lang-btn" onclick="toggleLanguage(this)">
+            切换到英文
+          </button>
+          <div class="original-content" style="display: none;">
+            {article.summary}
+          </div>
+        </div>
+      )}
+    </article>
+  ))}
+</div>
+
+<style>
+.articles-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.article-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.article-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+}
+
+.article-title a {
+  color: #495057;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.article-title a:hover {
+  color: #667eea;
+}
+
+.article-summary {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #868e96;
+}
+
+.article-category {
+  background-color: #e9ecef;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.toggle-lang-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-lang-btn:hover {
+  background-color: #e9ecef;
+}
+
+@media (max-width: 768px) {
+  .articles-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .article-card {
+    padding: 1rem;
+  }
+}
+</style>
+
+<script>
+function toggleLanguage(button) {
+  const card = button.closest('.article-card');
+  const originalContent = card.querySelector('.original-content');
+  const chineseContent = card.querySelector('.article-summary');
+  
+  if (originalContent.style.display === 'none') {
+    originalContent.style.display = 'block';
+    chineseContent.style.display = 'none';
+    button.textContent = '切换到中文';
+  } else {
+    originalContent.style.display = 'none';
+    chineseContent.style.display = 'block';
+    button.textContent = '切换到英文';
+  }
+}
+</script>
