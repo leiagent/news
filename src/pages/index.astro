@@ -1,12 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ArticleList from '../components/ArticleList.astro';
-
-// This would typically come from a data source or API
-const newsData = Astro.props.newsData || [];
+import newsData from '../data/news.json';
 
 const pageTitle = '首页';
 const pageDescription = '每日更新全球科技、AI、软件开发等领域最新资讯';
+const articles = newsData.articles;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -17,7 +16,7 @@ const pageDescription = '每日更新全球科技、AI、软件开发等领域�
     </section>
     
     <section class="news-section">
-      <ArticleList articles={newsData} />
+      <ArticleList articles={articles} />
     </section>
   </div>
 </Layout>
